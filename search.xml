@@ -1,46 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>PyTorch环境配置笔记</title>
-    <url>/2024/12/08/PyTorch%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>每次跑深度学习代码之前，配环境都是令人头疼的一件事，为了便于以后排查错误，将一些基本概念和常见问题整理了出来。</p>
+    <title>Linux添加用户和管理员权限</title>
+    <url>/2025/04/23/Linux%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%92%8C%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90/</url>
+    <content><![CDATA[<p>实验室马上就要新老管理员交替了，Linux 的添加用户和赋予管理员权限命令以后会时不时用到，故专门开一期博客来记录一下（以下全部基于 Ubuntu 系统）。</p>
 <span id="more"></span>
 
-<h2 id="显卡"><a href="#显卡" class="headerlink" title="显卡"></a>显卡</h2><p>不是所有的GPU都支持CUDA，CUDA是NVIDIA推出的。一般用的都是NVIDIA的卡，所以应该不会碰到这个问题。</p>
-<h2 id="显存"><a href="#显存" class="headerlink" title="显存"></a>显存</h2><p>显存之于GPU，就像内存之于CPU。</p>
-<h2 id="显卡驱动（特指NVIDIA-Driver）"><a href="#显卡驱动（特指NVIDIA-Driver）" class="headerlink" title="显卡驱动（特指NVIDIA Driver）"></a>显卡驱动（特指NVIDIA Driver）</h2><p>显卡驱动是连接显卡和计算机的桥梁，方便计算机识别GPU是否正确安装。NVIDIA Driver是NVIDIA显卡驱动软件，这个版本一般是和显卡型号相关的。</p>
-<h2 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h2><p>CUDA的全称是Compute Unified Device Architecture（统一计算设备架构），属于一种并行计算平台和编程模型，能使GPU更简单地进行通用计算。运行CUDA应用程序要求系统至少有<strong>一个具有CUDA功能的GPU</strong>和<strong>与CUDA Toolkit兼容的驱动程序</strong>。</p>
-<p>CUDA的安装路径一般在：&#x2F;usr&#x2F;local&#x2F;cuda-xx.x&#x2F;（xx.x为版本号）一个系统中可以安装多个CUDA版本，使用时修改软链接即可。</p>
-<p>查看显卡支持的最高CUDA版本（驱动API）：</p>
-<p><code>nvidia-smi</code></p>
-<p>CUDA多版本切换（有管理员权限）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将~/.bashrc下与CUDA相关的路径都改为/usr/local/cuda，不添加版本号</span></span><br><span class="line"><span class="built_in">rm</span> -rf /usr/local/cuda  <span class="comment"># 删除旧的软链接</span></span><br><span class="line">sudo <span class="built_in">ln</span> -s /usr/local/cuda-xx.x /usr/local/cuda  <span class="comment"># 添加新的软链接</span></span><br><span class="line">nvcc -V  <span class="comment"># 检查当前版本</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加新用户"><a href="#添加新用户" class="headerlink" title="添加新用户"></a>添加新用户</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加一个名为newuser的新用户，并自动在/home/下创建用户目录</span></span><br><span class="line">sudo useradd -m newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定home目录位置则添加-d</span></span><br><span class="line">sudo useradd -m -d /path/to/home/newuser newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置初始密码（会要求输入两次密码）</span></span><br><span class="line">sudo passwd newuser</span><br></pre></td></tr></table></figure>
 
-<p>查询GPU算力：<a href="https://developer.nvidia.com/cuda-gpus#compute">官方算力表</a></p>
-<p>GPU算力和CUDA版本对应关系：<a href="https://en.wikipedia.org/wiki/CUDA#GPUs_supported">速查表</a></p>
-<h3 id="cuDNN"><a href="#cuDNN" class="headerlink" title="cuDNN"></a>cuDNN</h3><p>cuDNN是一个专为深度学习设计的软件库，里面提供了很多计算函数，如卷积。cuDNN与CUDA的关系好比是工具和工作台，安装了CUDA相当于只买来了一个平台，并没有提供专为深度神经网络加速的工具，因此还需要安装cuDNN。cuDNN是插入式设计，因此安装的时候只需要把cuDNN相关文件直接复制到CUDA路径中即可。</p>
-<p><a href="https://docs.nvidia.com/deeplearning/sdk/cudnn-install/">官网综述链接</a></p>
-<p>注：cuDNN和CUDA的版本存在一定对应关系，但是一般到了11以上的版本就不太会出现冲突了。<a href="https://developer.nvidia.com/rdp/cudnn-archive">详见官网</a></p>
-<h3 id="CUDA-Toolkit"><a href="#CUDA-Toolkit" class="headerlink" title="CUDA Toolkit"></a>CUDA Toolkit</h3><p>CUDA Toolkit主要包含了CUDA-C和CUDA-C++编译器、一些实用程序库、library API的代码示例和一些CUDA开发工具。一般安装CUDA Toolkit都是默认安装了CUDA Driver的，<strong>需要关注的是，CUDA Toolkit和在Anaconda中安装torch时自动安装的cudatoolkit有一定区别</strong>。CUDA Toolkit的功能更加完整，只有在进行其他CUDA相关程序的编译时才会用到，和项目的环境需求有关。安装PyTorch的时候，cudatoolkit包含了与CUDA相关的动态链接库，PyTorch本身与CUDA相关的部分是预编译好的，不需要重新执行编译过程。</p>
-<p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#major-components">官网综述链接</a></p>
-<p>注：CUDA Toolkit和CUDA Driver的版本存在一定对应关系。<a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">详见官网</a></p>
-<h3 id="NVCC"><a href="#NVCC" class="headerlink" title="NVCC"></a>NVCC</h3><p>NVCC是CUDA的编译器，一般存放在CUDA Toolkit的&#x2F;bin目录中，类似于C语言的gcc编译器。</p>
-<p>查看当前CUDA版本（运行API）：</p>
-<p><code>nvcc -V</code></p>
-<p>此命令无效时检查环境变量是否配好：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line">sudo gedit ~/.bashrc</span><br><span class="line"><span class="comment"># 添加如下信息</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/usr/local/cuda-xx.x/bin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="string">&quot;/usr/local/cuda-xx.x/lib64:<span class="variable">$LD_LIBRARY_PATH</span>&quot;</span></span><br><span class="line"><span class="comment"># 关闭文件，使之生效</span></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+<h2 id="管理员权限操作"><a href="#管理员权限操作" class="headerlink" title="管理员权限操作"></a>管理员权限操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前管理员权限用户</span></span><br><span class="line">grep -Po <span class="string">&#x27;^sudo.+:\K.*$&#x27;</span> /etc/group</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加newuser管理员权限，参数“-aG”表示追加到指定组，不移除原有成员</span></span><br><span class="line">sudo usermod -aG sudo newuser</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">sudo adduser newuser sudo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除newuser管理员权限</span></span><br><span class="line">sudo deluser newuser sudo</span><br></pre></td></tr></table></figure>
 
-<h2 id="PyTorch和CUDA"><a href="#PyTorch和CUDA" class="headerlink" title="PyTorch和CUDA"></a>PyTorch和CUDA</h2><p>使用conda查看版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda list | grep cuda</span><br><span class="line">conda list | grep torch</span><br><span class="line">conda list | grep pytorch  <span class="comment"># 使用conda安装的pytorch</span></span><br></pre></td></tr></table></figure>
-
-<p>使用Python查看版本</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.utils</span><br><span class="line"><span class="keyword">import</span> torch.utils.cpp_extension</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.__version__) <span class="comment"># 查看torch版本</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.is_available()) <span class="comment"># 看安装好的torch和cuda能不能用，也就是看GPU能不能用</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.version.cuda) <span class="comment"># 输出一个cuda版本，该cuda版本并不一定是pytorch在实际系统上运行时使用的cuda版本，而是编译该pytorch release版本时使用的cuda版本，也就是官方绑定的cuda版本</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.utils.cpp_extension.CUDA_HOME) <span class="comment">#输出pytorch运行时实际使用的cuda</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="关于Pytorch和CUDA的版本冲突"><a href="#关于Pytorch和CUDA的版本冲突" class="headerlink" title="关于Pytorch和CUDA的版本冲突"></a>关于Pytorch和CUDA的版本冲突</h3><ol>
-<li>一定先去算力表查看GPU架构支持的CUDA版本。</li>
-<li>找到PyTorch和CUDA的交集，选择版本最高的CUDA。</li>
-</ol>
-<p><a href="https://download.pytorch.org/whl/torch_stable.html">离线安装</a></p>
+<p><strong>注：管理员权限在指定用户账户下终端重启后生效。</strong></p>
+<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除用户user及其家目录</span></span><br><span class="line">sudo userdel -r user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看用户user信息</span></span><br><span class="line"><span class="built_in">id</span> user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换为用户user，加“-”表示带环境变量一起切换（若user为管理员，也可以使用sudo登录）</span></span><br><span class="line">su - user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前用户名</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改当前用户密码</span></span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用sudo更改其他用户密码</span></span><br><span class="line">sudo passwd username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建root密码</span></span><br><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
@@ -93,17 +64,46 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Linux添加用户和管理员权限</title>
-    <url>/2025/04/23/Linux%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%92%8C%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90/</url>
-    <content><![CDATA[<p>实验室马上就要新老管理员交替了，Linux 的添加用户和赋予管理员权限命令以后会时不时用到，故专门开一期博客来记录一下（以下全部基于 Ubuntu 系统）。</p>
+    <title>PyTorch环境配置笔记</title>
+    <url>/2024/12/08/PyTorch%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>每次跑深度学习代码之前，配环境都是令人头疼的一件事，为了便于以后排查错误，将一些基本概念和常见问题整理了出来。</p>
 <span id="more"></span>
 
-<h2 id="添加新用户"><a href="#添加新用户" class="headerlink" title="添加新用户"></a>添加新用户</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加一个名为newuser的新用户，并自动在/home/下创建用户目录</span></span><br><span class="line">sudo useradd -m newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定home目录位置则添加-d</span></span><br><span class="line">sudo useradd -m -d /path/to/home/newuser newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置初始密码（会要求输入两次密码）</span></span><br><span class="line">sudo passwd newuser</span><br></pre></td></tr></table></figure>
+<h2 id="显卡"><a href="#显卡" class="headerlink" title="显卡"></a>显卡</h2><p>不是所有的GPU都支持CUDA，CUDA是NVIDIA推出的。一般用的都是NVIDIA的卡，所以应该不会碰到这个问题。</p>
+<h2 id="显存"><a href="#显存" class="headerlink" title="显存"></a>显存</h2><p>显存之于GPU，就像内存之于CPU。</p>
+<h2 id="显卡驱动（特指NVIDIA-Driver）"><a href="#显卡驱动（特指NVIDIA-Driver）" class="headerlink" title="显卡驱动（特指NVIDIA Driver）"></a>显卡驱动（特指NVIDIA Driver）</h2><p>显卡驱动是连接显卡和计算机的桥梁，方便计算机识别GPU是否正确安装。NVIDIA Driver是NVIDIA显卡驱动软件，这个版本一般是和显卡型号相关的。</p>
+<h2 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h2><p>CUDA的全称是Compute Unified Device Architecture（统一计算设备架构），属于一种并行计算平台和编程模型，能使GPU更简单地进行通用计算。运行CUDA应用程序要求系统至少有<strong>一个具有CUDA功能的GPU</strong>和<strong>与CUDA Toolkit兼容的驱动程序</strong>。</p>
+<p>CUDA的安装路径一般在：&#x2F;usr&#x2F;local&#x2F;cuda-xx.x&#x2F;（xx.x为版本号）一个系统中可以安装多个CUDA版本，使用时修改软链接即可。</p>
+<p>查看显卡支持的最高CUDA版本（驱动API）：</p>
+<p><code>nvidia-smi</code></p>
+<p>CUDA多版本切换（有管理员权限）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将~/.bashrc下与CUDA相关的路径都改为/usr/local/cuda，不添加版本号</span></span><br><span class="line"><span class="built_in">rm</span> -rf /usr/local/cuda  <span class="comment"># 删除旧的软链接</span></span><br><span class="line">sudo <span class="built_in">ln</span> -s /usr/local/cuda-xx.x /usr/local/cuda  <span class="comment"># 添加新的软链接</span></span><br><span class="line">nvcc -V  <span class="comment"># 检查当前版本</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="管理员权限操作"><a href="#管理员权限操作" class="headerlink" title="管理员权限操作"></a>管理员权限操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前管理员权限用户</span></span><br><span class="line">grep -Po <span class="string">&#x27;^sudo.+:\K.*$&#x27;</span> /etc/group</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加newuser管理员权限，参数“-aG”表示追加到指定组，不移除原有成员</span></span><br><span class="line">sudo usermod -aG sudo newuser</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">sudo adduser newuser sudo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除newuser管理员权限</span></span><br><span class="line">sudo deluser newuser sudo</span><br></pre></td></tr></table></figure>
+<p>查询GPU算力：<a href="https://developer.nvidia.com/cuda-gpus#compute">官方算力表</a></p>
+<p>GPU算力和CUDA版本对应关系：<a href="https://en.wikipedia.org/wiki/CUDA#GPUs_supported">速查表</a></p>
+<h3 id="cuDNN"><a href="#cuDNN" class="headerlink" title="cuDNN"></a>cuDNN</h3><p>cuDNN是一个专为深度学习设计的软件库，里面提供了很多计算函数，如卷积。cuDNN与CUDA的关系好比是工具和工作台，安装了CUDA相当于只买来了一个平台，并没有提供专为深度神经网络加速的工具，因此还需要安装cuDNN。cuDNN是插入式设计，因此安装的时候只需要把cuDNN相关文件直接复制到CUDA路径中即可。</p>
+<p><a href="https://docs.nvidia.com/deeplearning/sdk/cudnn-install/">官网综述链接</a></p>
+<p>注：cuDNN和CUDA的版本存在一定对应关系，但是一般到了11以上的版本就不太会出现冲突了。<a href="https://developer.nvidia.com/rdp/cudnn-archive">详见官网</a></p>
+<h3 id="CUDA-Toolkit"><a href="#CUDA-Toolkit" class="headerlink" title="CUDA Toolkit"></a>CUDA Toolkit</h3><p>CUDA Toolkit主要包含了CUDA-C和CUDA-C++编译器、一些实用程序库、library API的代码示例和一些CUDA开发工具。一般安装CUDA Toolkit都是默认安装了CUDA Driver的，<strong>需要关注的是，CUDA Toolkit和在Anaconda中安装torch时自动安装的cudatoolkit有一定区别</strong>。CUDA Toolkit的功能更加完整，只有在进行其他CUDA相关程序的编译时才会用到，和项目的环境需求有关。安装PyTorch的时候，cudatoolkit包含了与CUDA相关的动态链接库，PyTorch本身与CUDA相关的部分是预编译好的，不需要重新执行编译过程。</p>
+<p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#major-components">官网综述链接</a></p>
+<p>注：CUDA Toolkit和CUDA Driver的版本存在一定对应关系。<a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">详见官网</a></p>
+<h3 id="NVCC"><a href="#NVCC" class="headerlink" title="NVCC"></a>NVCC</h3><p>NVCC是CUDA的编译器，一般存放在CUDA Toolkit的&#x2F;bin目录中，类似于C语言的gcc编译器。</p>
+<p>查看当前CUDA版本（运行API）：</p>
+<p><code>nvcc -V</code></p>
+<p>此命令无效时检查环境变量是否配好：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line">sudo gedit ~/.bashrc</span><br><span class="line"><span class="comment"># 添加如下信息</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/usr/local/cuda-xx.x/bin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="string">&quot;/usr/local/cuda-xx.x/lib64:<span class="variable">$LD_LIBRARY_PATH</span>&quot;</span></span><br><span class="line"><span class="comment"># 关闭文件，使之生效</span></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
 
-<p><strong>注：管理员权限在指定用户账户下终端重启后生效。</strong></p>
-<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除用户user及其家目录</span></span><br><span class="line">sudo userdel -r user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看用户user信息</span></span><br><span class="line"><span class="built_in">id</span> user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换为用户user，加“-”表示带环境变量一起切换（若user为管理员，也可以使用sudo登录）</span></span><br><span class="line">su - user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前用户名</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改当前用户密码</span></span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用sudo更改其他用户密码</span></span><br><span class="line">sudo passwd username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建root密码</span></span><br><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+<h2 id="PyTorch和CUDA"><a href="#PyTorch和CUDA" class="headerlink" title="PyTorch和CUDA"></a>PyTorch和CUDA</h2><p>使用conda查看版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda list | grep cuda</span><br><span class="line">conda list | grep torch</span><br><span class="line">conda list | grep pytorch  <span class="comment"># 使用conda安装的pytorch</span></span><br></pre></td></tr></table></figure>
+
+<p>使用Python查看版本</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.utils</span><br><span class="line"><span class="keyword">import</span> torch.utils.cpp_extension</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.__version__) <span class="comment"># 查看torch版本</span></span><br><span class="line"><span class="built_in">print</span>(torch.cuda.is_available()) <span class="comment"># 看安装好的torch和cuda能不能用，也就是看GPU能不能用</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.version.cuda) <span class="comment"># 输出一个cuda版本，该cuda版本并不一定是pytorch在实际系统上运行时使用的cuda版本，而是编译该pytorch release版本时使用的cuda版本，也就是官方绑定的cuda版本</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(torch.utils.cpp_extension.CUDA_HOME) <span class="comment">#输出pytorch运行时实际使用的cuda</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="关于Pytorch和CUDA的版本冲突"><a href="#关于Pytorch和CUDA的版本冲突" class="headerlink" title="关于Pytorch和CUDA的版本冲突"></a>关于Pytorch和CUDA的版本冲突</h3><ol>
+<li>一定先去算力表查看GPU架构支持的CUDA版本。</li>
+<li>找到PyTorch和CUDA的交集，选择版本最高的CUDA。</li>
+</ol>
+<p><a href="https://download.pytorch.org/whl/torch_stable.html">离线安装</a></p>
 ]]></content>
   </entry>
 </search>
