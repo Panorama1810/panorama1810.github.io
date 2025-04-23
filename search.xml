@@ -44,6 +44,18 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Linux添加用户和管理员权限</title>
+    <url>/2025/04/23/Linux%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%92%8C%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90/</url>
+    <content><![CDATA[<p>实验室马上就要新老管理员交替了，Linux 的添加用户和赋予管理员权限命令以后会时不时用到，故专门开一期博客来记录一下（以下全部基于 Ubuntu 系统）。</p>
+<h2 id="添加新用户"><a href="#添加新用户" class="headerlink" title="添加新用户"></a>添加新用户</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加一个名为newuser的新用户，并自动在/home/下创建用户目录</span></span><br><span class="line">sudo useradd -m newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定home目录位置则添加-d</span></span><br><span class="line">sudo useradd -m -d /path/to/home/newuser newuser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置初始密码（会要求输入两次密码）</span></span><br><span class="line">sudo passwd newuser</span><br></pre></td></tr></table></figure>
+
+<h2 id="管理员权限操作"><a href="#管理员权限操作" class="headerlink" title="管理员权限操作"></a>管理员权限操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前管理员权限用户</span></span><br><span class="line">grep -Po <span class="string">&#x27;^sudo.+:\K.*$&#x27;</span> /etc/group</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加newuser管理员权限，参数“-aG”表示追加到指定组，不移除原有成员</span></span><br><span class="line">sudo usermod -aG sudo newuser</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">sudo adduser newuser sudo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除newuser管理员权限</span></span><br><span class="line">sudo deluser newuser sudo</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：管理员权限在指定用户账户下终端重启后生效。</strong></p>
+<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除用户user及其家目录</span></span><br><span class="line">sudo userdel -r user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看用户user信息</span></span><br><span class="line"><span class="built_in">id</span> user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换为用户user，加“-”表示带环境变量一起切换（若user为管理员，也可以使用sudo登录）</span></span><br><span class="line">su - user</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前用户名</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改当前用户密码</span></span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用sudo更改其他用户密码</span></span><br><span class="line">sudo passwd username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建root密码</span></span><br><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello Hexo!</title>
     <url>/2024/07/20/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
