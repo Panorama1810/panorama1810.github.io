@@ -162,4 +162,15 @@
 <h2 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h2><p>最后注意检查权限，权限不能随便乱给！</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>Java打包jar包时出现的奇怪问题</title>
+    <url>/2025/08/12/Java%E6%89%93%E5%8C%85jar%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0%E7%9A%84%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="事件起因"><a href="#事件起因" class="headerlink" title="事件起因"></a>事件起因</h2><p>使用 IDEA 打包个人基础项目的时候跟随现阶段所有网上的教程均无效，网上最多的教程就是：点击“文件”，点击“项目结构”，然后在“工件”那里添加一系列设置。然而，跟随着这些操作下来，反复尝试了多次，折腾了几个小时，就是无法成功打包。</p>
+<h2 id="主要问题"><a href="#主要问题" class="headerlink" title="主要问题"></a>主要问题</h2><p>到最后一步：构建 &gt; 构建工件</p>
+<p>鼠标点击任何一个菜单条目均无反应。（正常情况应该下方会展示进度条）</p>
+<h2 id="临时解决方案"><a href="#临时解决方案" class="headerlink" title="临时解决方案"></a>临时解决方案</h2><p><img src="/2025/08/12/Java%E6%89%93%E5%8C%85jar%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0%E7%9A%84%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98/PixPin_2025-08-12_17-56-05.png" alt="PixPin_2025-08-12_17-56-05"></p>
+<p>“包含在项目构建中”必须勾选上，这样 IDEA 在编译的时候就会连同 jar 包一起构建了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个问题目前原因未知，好像没人反映过这个问题。</p>
+]]></content>
+  </entry>
 </search>
