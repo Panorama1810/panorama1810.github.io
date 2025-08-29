@@ -173,4 +173,44 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个问题目前原因未知，好像没人反映过这个问题。</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>使用git上传项目到Github</title>
+    <url>/2025/08/29/%E4%BD%BF%E7%94%A8git%E4%B8%8A%E4%BC%A0%E9%A1%B9%E7%9B%AE%E5%88%B0Github/</url>
+    <content><![CDATA[<p>git 命令不经常使用，很容易忘记，特意记录在此。</p>
+<span id="more"></span>
+
+<h2 id="步骤-1"><a href="#步骤-1" class="headerlink" title="步骤 1"></a>步骤 1</h2><p>检查本地的凭据管理器，这一步是关键，凭据可以避免重复输入用户名和密码，凭据出现问题可能会导致一些意外错误。</p>
+<p>在“开始”菜单直接搜索凭据管理器，找到 git 凭据并确认无误即可。</p>
+<h2 id="步骤-2"><a href="#步骤-2" class="headerlink" title="步骤 2"></a>步骤 2</h2><p>在 Github 建立仓库，直接在网站上操作比较清晰直观。</p>
+<h2 id="步骤-3"><a href="#步骤-3" class="headerlink" title="步骤 3"></a>步骤 3</h2><p>检查用户名和邮箱标识。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;username&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;email&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤-4"><a href="#步骤-4" class="headerlink" title="步骤 4"></a>步骤 4</h2><p>配置 SSH key。</p>
+<h3 id="第-1-步"><a href="#第-1-步" class="headerlink" title="第 1 步"></a>第 1 步</h3><p>检查用户目录下的 .ssh 路径中有没有 id_rsa（私钥）和 id_rsa.pub（公钥）。若有，检查配置账户和当前目标提交账户是否匹配，若匹配，直接转至步骤 4，否则依次完成以下操作。</p>
+<h3 id="第-2-步"><a href="#第-2-步" class="headerlink" title="第 2 步"></a>第 2 步</h3><p>删除 id_rsa 和 id_rsa.pub（若文件存在），然后执行以下命令，后续输入全部回车即可。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;email&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="第-3-步"><a href="#第-3-步" class="headerlink" title="第 3 步"></a>第 3 步</h3><p>在 Github 的设置中配置 SSH key。将 id_rsa.pub 中的内容全部复制过去。</p>
+<p>至此完成配置步骤。</p>
+<h2 id="步骤-5"><a href="#步骤-5" class="headerlink" title="步骤 5"></a>步骤 5</h2><p>上传本地项目。</p>
+<h3 id="第-1-步-1"><a href="#第-1-步-1" class="headerlink" title="第 1 步"></a>第 1 步</h3><p>git 初始化，完成后在目录下会自动生成 .git 文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<h3 id="第-2-步-1"><a href="#第-2-步-1" class="headerlink" title="第 2 步"></a>第 2 步</h3><p>切换分支，从 master 分支切换到 main 分支。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -M main</span><br></pre></td></tr></table></figure>
+
+<h3 id="第-3-步-1"><a href="#第-3-步-1" class="headerlink" title="第 3 步"></a>第 3 步</h3><p>添加文件。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add README.md	//可选</span><br><span class="line">git add .			//添加当前目录下的所有内容</span><br></pre></td></tr></table></figure>
+
+<h3 id="第-4-步"><a href="#第-4-步" class="headerlink" title="第 4 步"></a>第 4 步</h3><p>提交至仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;提交代码&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="第-5-步"><a href="#第-5-步" class="headerlink" title="第 5 步"></a>第 5 步</h3><p>关联 Github 仓库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:xxx/xxx.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="第-6-步"><a href="#第-6-步" class="headerlink" title="第 6 步"></a>第 6 步</h3><p>上传。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
 </search>
