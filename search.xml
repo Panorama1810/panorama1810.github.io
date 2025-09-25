@@ -183,7 +183,7 @@
 <p>在“开始”菜单直接搜索凭据管理器，找到 git 凭据并确认无误即可。</p>
 <h2 id="步骤-2"><a href="#步骤-2" class="headerlink" title="步骤 2"></a>步骤 2</h2><p>在 Github 建立仓库，直接在网站上操作比较清晰直观。</p>
 <h2 id="步骤-3"><a href="#步骤-3" class="headerlink" title="步骤 3"></a>步骤 3</h2><p>检查用户名和邮箱标识。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;username&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;email&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global -l	<span class="comment"># 全局配置检查</span></span><br><span class="line">git config --global user.name <span class="string">&quot;username&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;email&quot;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="步骤-4"><a href="#步骤-4" class="headerlink" title="步骤 4"></a>步骤 4</h2><p>配置 SSH key。</p>
 <h3 id="第-1-步"><a href="#第-1-步" class="headerlink" title="第 1 步"></a>第 1 步</h3><p>检查用户目录下的 .ssh 路径中有没有 id_rsa（私钥）和 id_rsa.pub（公钥）。若有，检查配置账户和当前目标提交账户是否匹配，若匹配，直接转至步骤 4，否则依次完成以下操作。</p>
